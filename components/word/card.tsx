@@ -1,8 +1,8 @@
 import type React from "react";
-import {View, Pressable} from "react-native";
-import {Button} from "@/components/ui/button";
-import {Text} from "@/components/ui/text";
-import type {Habit} from "@/lib/storage";
+import { View, Pressable } from "react-native";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
+import type { word } from "@/lib/storage";
 import {
   Card,
   CardContent,
@@ -11,21 +11,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {Badge} from "../ui/badge";
-import {Progress} from "../ui/progress";
-import {Link} from "expo-router";
+import { Badge } from "../ui/badge";
+import { Progress } from "../ui/progress";
+import { Link } from "expo-router";
 
-type HabitProps = Habit;
+type wordProps = word;
 
-export const HabitCard: React.FC<HabitProps> = ({id, name, description, category}: HabitProps) => {
+export const WordCard: React.FC<wordProps> = ({ id, word, translation, sentence, category }: wordProps) => {
   return (
-    <Link href={`/habits/${ id }`} asChild>
+    <Link href={`/words/${id}`} asChild>
       <Pressable>
         <Card className="rounded-2xl">
           <CardHeader>
             <View className="flex-row gap-4 items-center">
               <CardTitle className="pb-2">
-                {name}
+                {word}
               </CardTitle>
               <Badge variant="outline">
                 <Text >{category}</Text>
@@ -34,7 +34,7 @@ export const HabitCard: React.FC<HabitProps> = ({id, name, description, category
 
             <View className="flex-col">
               <CardDescription className="text-base font-semibold">
-                {description}
+                {translation}
               </CardDescription>
             </View>
           </CardHeader>

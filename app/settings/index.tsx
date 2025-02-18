@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {View} from 'react-native';
-import {Text} from '@/components/ui';
-import List, {ListHeader} from "@/components/ui/list";
+import { View } from 'react-native';
+import { Text } from '@/components/ui';
+import List, { ListHeader } from "@/components/ui/list";
 import ListItem from "@/components/ui/list-item";
-import {Muted} from "@/components/ui/typography";
-import {Plus, PlusCircle} from "@/components/Icons";
+import { Muted } from "@/components/ui/typography";
+import { Plus, PlusCircle } from "@/components/Icons";
 
 
 export default function Settings() {
@@ -13,7 +13,7 @@ export default function Settings() {
 
       <List>
         <ListHeader>
-          <Muted>Habbits</Muted>
+          <Muted>Words</Muted>
         </ListHeader>
 
         <ListItem

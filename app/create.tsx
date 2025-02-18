@@ -30,35 +30,28 @@ import {
 } from "@/components/ui/select";
 
 import { Text } from "@/components/ui/text";
-import { habitTable } from "@/db/schema";
+import { wordTable } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { useDatabase } from "@/db/provider";
 import { X } from "lucide-react-native";
 
 
-const HabitCategories = [
-  { value: "health", label: "Health And Wellness" },
-  { value: "personal-development", label: "Personal Development" },
-  { value: "social-and-relationshipts", label: "Social And Relationships" },
-  { value: "productivity", label: "Productivity" },
-  { value: "creativity", label: "Creativity" },
-  { value: "mindfulness", label: "Mindfulness" },
-  { value: "financial", label: "Financial" },
-  { value: "leisure", label: "Leisure" },
+const WordCategories = [
+  { value: "general", label: "General" },
+  { value: "noun", label: "Noun" },
+  { value: "verb", label: "Verb" },
+  { value: "adjectives", label: "Adjectives" },
 ];
 
-const HabitDurations = [
-  { value: 5, label: "5 minutes" },
-  { value: 10, label: "10 minutes" },
-  { value: 15, label: "15 minutes" },
-  { value: 30, label: "30 minutes" },
-];
 
-const formSchema = createInsertSchema(habitTable, {
-  name: (schema) => schema.name.min(4, {
-    message: "Please enter a habit name.",
+const formSchema = createInsertSchema(wordTable, {
+  word: (schema) => schema.word.min(1, {
+    message: "Please enter a word name.",
   }),
-  description: (schema) => schema.description.min(1, {
+  translation: (schema) => schema.translation.min(1, {
+    message: "We need to know.",
+  }),
+  sentence: (schema) => schema.sentence.min(1, {
     message: "We need to know.",
   }),
   category: z.object(
@@ -67,8 +60,6 @@ const formSchema = createInsertSchema(habitTable, {
       invalid_type_error: "Please select a favorite email.",
     },
   ),
-  duration: z.union([z.string(), z.number()]),
-  enableNotifications: z.boolean(),
 });
 
 
@@ -84,11 +75,10 @@ export default function FormScreen() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      duration: 5,
-      category: { value: "health", label: "Health And Wellness" },
-      enableNotifications: false,
+      word: "",
+      translation: "",
+      sentence: "",
+      category: { value: "general", label: "General" },
     },
   });
 
@@ -102,10 +92,9 @@ export default function FormScreen() {
   async function handleSubmit(values: z.infer<typeof formSchema>) {
 
     try {
-      await db?.insert(habitTable).values({
+      await db?.insert(wordTable).values({
         ...values,
         category: values.category.value,
-        duration: Number(values.duration),
       }).returning()
       router.replace("/")
     } catch (e) {
@@ -123,7 +112,7 @@ export default function FormScreen() {
     >
       <Stack.Screen
         options={{
-          title: "New Habit",
+          title: "New word",
           headerRight: () => Platform.OS !== "web" && <Pressable onPress={() => router.dismiss()}><X /></Pressable>
         }}
       />
@@ -132,11 +121,25 @@ export default function FormScreen() {
         <View className="gap-8">
           <FormField
             control={form.control}
-            name="name"
+            name="word"
             render={({ field }) => (
               <FormInput
-                label="Name"
-                placeholder="Habit name"
+                label="Word"
+                placeholder="Write the word"
+                className="text-foreground"
+                description="This will help you remind."
+                autoCapitalize="none"
+                {...field}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="translation"
+            render={({ field }) => (
+              <FormInput
+                label="Translation"
+                placeholder="Write the translation"
                 className="text-foreground"
                 description="This will help you remind."
                 autoCapitalize="none"
@@ -147,12 +150,12 @@ export default function FormScreen() {
 
           <FormField
             control={form.control}
-            name="description"
+            name="sentence"
             render={({ field }) => (
               <FormTextarea
-                label="Description"
-                placeholder="Habit for ..."
-                description="habit description"
+                label="sentence"
+                placeholder="Sentence for ..."
+                description="sentence for ..."
                 {...field}
               />
             )}
@@ -164,7 +167,7 @@ export default function FormScreen() {
             render={({ field }) => (
               <FormSelect
                 label="Category"
-                description="Select on of the habit description"
+                description="Select on of the word description"
                 {...field}
               >
                 <SelectTrigger
@@ -177,7 +180,7 @@ export default function FormScreen() {
                       "text-sm native:text-lg",
                       field.value ? "text-foreground" : "text-muted-foreground",
                     )}
-                    placeholder="Select a habit category"
+                    placeholder="Select a word category"
                   />
                 </SelectTrigger>
                 <SelectContent
@@ -185,7 +188,7 @@ export default function FormScreen() {
                   style={{ width: selectTriggerWidth }}
                 >
                   <SelectGroup>
-                    {HabitCategories.map((cat) => (
+                    {WordCategories.map((cat) => (
                       <SelectItem
                         key={cat.value}
                         label={cat.label}
@@ -200,59 +203,6 @@ export default function FormScreen() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="duration"
-            render={({ field }) => {
-              function onLabelPress(value: number | string) {
-                return () => {
-                  form.setValue("duration", value);
-                };
-              }
-              return (
-                <FormRadioGroup
-                  label="Duration"
-                  description="Select your duration."
-                  className="gap-4"
-                  {...field}
-                  value={field.value.toString()}
-                >
-                  {HabitDurations.map((item) => {
-                    return (
-                      <View
-                        key={item.value}
-                        className={"flex-row gap-2 items-center"}
-                      >
-                        <RadioGroupItem
-                          aria-labelledby={`label-for-${item.label}`}
-                          value={item.value.toString()}
-                        />
-                        <Label
-                          nativeID={`label-for-${item.label}`}
-                          className="capitalize"
-                          onPress={onLabelPress(item.value)}
-                        >
-                          {item.label}
-                        </Label>
-                      </View>
-                    );
-                  })}
-                </FormRadioGroup>
-              );
-            }}
-          />
-
-          <FormField
-            control={form.control}
-            name="enableNotifications"
-            render={({ field }) => (
-              <FormSwitch
-                label="Enable reminder"
-                description="We will send you notification reminder."
-                {...field}
-              />
-            )}
-          />
 
           <Button onPress={form.handleSubmit(handleSubmit)}>
             <Text>Submit</Text>

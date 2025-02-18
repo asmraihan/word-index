@@ -1,11 +1,11 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "0347d2a2-b3dc-40bf-8d26-2411ae16dea2",
+  "id": "6cdf8160-5411-46eb-9901-41f94158e346",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "habits": {
-      "name": "habits",
+    "words": {
+      "name": "words",
       "columns": {
         "id": {
           "name": "id",
@@ -14,15 +14,22 @@
           "notNull": true,
           "autoincrement": false
         },
-        "name": {
-          "name": "name",
+        "word": {
+          "name": "word",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "description": {
-          "name": "description",
+        "translation": {
+          "name": "translation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sentence": {
+          "name": "sentence",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -34,21 +41,6 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "duration": {
-          "name": "duration",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "enable_notifications": {
-          "name": "enable_notifications",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -62,13 +54,18 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     }
   },
+  "views": {},
   "enums": {},
   "_meta": {
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

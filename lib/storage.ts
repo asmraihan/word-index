@@ -1,30 +1,29 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const HABIT_KEY = "habits";
+const word_KEY = "words";
 
-export type Habit = {
+export type word = {
   id: string;
-  name: string;
-  description: string;
-  duration: number;
+  word: string;
+  translation: string;
+  sentence: string;
   category: string;
-  enableNotifications: boolean;
 };
 
-export async function getHabits(): Promise<Habit[]> {
-  const habitsString = await AsyncStorage.getItem(HABIT_KEY);
-  if (!habitsString) {
+export async function getwords(): Promise<word[]> {
+  const wordsString = await AsyncStorage.getItem(word_KEY);
+  if (!wordsString) {
     return [];
   }
-  return JSON.parse(habitsString) as Habit[];
+  return JSON.parse(wordsString) as word[];
 }
 
-export async function setHabits(habits: Habit[]): Promise<void> {
-  await AsyncStorage.setItem(HABIT_KEY, JSON.stringify(habits));
+export async function setwords(words: word[]): Promise<void> {
+  await AsyncStorage.setItem(word_KEY, JSON.stringify(words));
 }
 
-export async function deleteHabit(id: string): Promise<void> {
-  const habits = await getHabits();
-  const updatedHabits = habits.filter((habit) => habit.id !== id);
-  await setHabits(updatedHabits);
+export async function deleteword(id: string): Promise<void> {
+  const words = await getwords();
+  const updatedwords = words.filter((word) => word.id !== id);
+  await setwords(updatedwords);
 }

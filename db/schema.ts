@@ -4,19 +4,16 @@ import { createId } from "@paralleldrive/cuid2";
 import { createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 
-export const habitTable = sqliteTable("habits", {
+export const wordTable = sqliteTable("words", {
   id: text("id")
     .$defaultFn(() => createId())
     .notNull(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
+  word: text("word").notNull(),
+  translation: text("translation").notNull(),
+  sentence: text("sentence").notNull(),
   category: text("category").notNull(),
-  duration: integer("duration").notNull(),
-  enableNotifications: integer("enable_notifications", {
-    mode: "boolean",
-  }).default(false),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 
-export const HabitSchema = createSelectSchema(habitTable);
-export type Habit = z.infer<typeof HabitSchema>;
+export const WordSchema= createSelectSchema(wordTable);
+export type word = z.infer<typeof WordSchema>;

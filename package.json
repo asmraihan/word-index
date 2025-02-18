@@ -1,5 +1,5 @@
 {
-  "name": "local-first",
+  "name": "word_index",
   "main": "index.ts",
   "version": "1.0.0",
   "homepage": "https://expo-starter.com",
@@ -40,7 +40,7 @@
     "babel-plugin-inline-import": "^3.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "drizzle-orm": "0.31.2",
+    "drizzle-orm": "^0.39.3",
     "drizzle-zod": "^0.5.1",
     "expo": "^51.0.0",
     "expo-linking": "~6.3.1",
@@ -74,7 +74,7 @@
     "@babel/runtime": "^7.24.4",
     "@types/react": "18.2.0",
     "@types/sql.js": "^1.4.9",
-    "drizzle-kit": "^0.21.2",
+    "drizzle-kit": "^0.30.4",
     "tailwindcss": "3.4.1",
     "typescript": "^5.4.5"
   },

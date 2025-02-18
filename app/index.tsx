@@ -10,15 +10,13 @@ import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 
 import { Progress } from "@/components/ui/progress";
 import { Text } from "@/components/ui/text";
-import { habitTable } from "@/db/schema";
+import { wordTable } from "@/db/schema";
 import { Plus, PlusCircle } from "@/components/Icons";
 import { useMigrationHelper } from "@/db/drizzle";
 import { useDatabase } from "@/db/provider";
 import { SettingsIcon } from "lucide-react-native";
-
-
-import { HabitCard } from "@/components/habit";
-import type { Habit } from "@/lib/storage";
+import { WordCard } from "@/components/word";
+import type { word } from "@/lib/storage";
 
 export default function Screen() {
   const { success, error } = useMigrationHelper();
@@ -43,7 +41,7 @@ export default function Screen() {
 
 function ScreenContent() {
   const { db } = useDatabase();
-  const { data: habits, error } = useLiveQuery(db?.select().from(habitTable));
+  const { data: words, error } = useLiveQuery(db?.select().from(wordTable));
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -51,7 +49,7 @@ function ScreenContent() {
   const router = useRouter();
 
   const renderItem = React.useCallback(
-    ({ item }: { item: Habit }) => <HabitCard {...item} />,
+    ({ item }: { item: word }) => <WordCard {...item} />,
     [],
   );
 
@@ -67,7 +65,7 @@ function ScreenContent() {
 
       <Stack.Screen
         options={{
-          title: "Habits",
+          title: "Word Index",
           headerRight: () => <ThemeToggle />,
           headerLeft: () => (
             <Button variant="link" onPress={() => router.navigate("settings")}>
@@ -96,7 +94,7 @@ function ScreenContent() {
           </View>
         )}
         ItemSeparatorComponent={() => <View className="p-2" />}
-        data={habits}
+        data={words}
         renderItem={renderItem}
         keyExtractor={(_, index) => `item-${index}`}
         ListFooterComponent={<View className="py-4" />}
